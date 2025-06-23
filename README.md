@@ -25,31 +25,31 @@ As an upcoming feature, users will be able to paste recipe blog URLs and automat
 Before development, I created rough UI mockups using screenshots and annotations to plan the layout and user flow.
 
 <h4>Sign-in Page</h4>
-<img src="public/markups/sign-in.png" alt="Sign-in page" width="25%" />
+<img src="public/mockups/sign-in.png" alt="Sign-in page" width="40%" />
 
 
 <h4>Profile Page</h4>
-<img src="public/markups/profile.png" alt = "Profile page" width="25%" />
+<img src="public/mockups/profile.png" alt = "Profile page" width="40%" />
 
 
 <h4>Homepage</h4>
-<img src="public/mockups/homepage.png" alt="Homepage mockup" width="25%" />
+<img src="public/mockups/homepage.png" alt="Homepage mockup" width="40%" />
 
 
 <h4>Side Nav</h4>
-<img src="public/markups/side-nav.png" alt="Side navigation" width="25%">
+<img src="public/mockups/side-nav.png" alt="Side navigation" width="40%">
 
 
 <h4>Recipe Page</h4>
-<img src="public/markups/recipe.png" alt="Recipe page" width="25%">
+<img src="public/mockups/recipe.png" alt="Recipe page" width="40%">
 
 
 <h4>Rate Recipe (Recipe Page)</h4>
-<img src="public/markups/rate-recipe.png" alt="Rate recipe" width="25%">
+<img src="public/mockups/rate-recipe.png" alt="Rate recipe" width="40%">
 
 
 <h4>Comments Section (Recipe Page)</h4>
-<img src="public/markups/comments-section.png" alt="Comments section" width="25%">
+<img src="public/mockups/comments-section.png" alt="Comments section" width="40%">
 
 
 
