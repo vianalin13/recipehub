@@ -21,6 +21,29 @@ As an upcoming feature, users will be able to paste recipe blog URLs and automat
 
 ---
 
+## UI Preview
+Before development, I created rough UI mockups using screenshots and annotations to plan the layout and user flow.
+
+
+![Sign-in](public/markups/sign-in.png)
+
+![Profile](public/markups/profile.png)
+
+![Homepage](public/markups/homepage.png)
+
+![Side-Nav](public/markups/side-nav.png)
+
+![Recipe-Page](public/markups/recipe.png)
+
+![Rate-Recipe-Recipe-Page](public/markups/rate-recipe.png)
+
+![Comments-Section-Recipe-Page](public/markups/comments-section.png)
+
+
+*Note: UI sketch was inspired by Youtube's layout
+
+---
+
 ## Features
 
 - User Authentication (email or google)
