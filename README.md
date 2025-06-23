@@ -24,20 +24,33 @@ As an upcoming feature, users will be able to paste recipe blog URLs and automat
 ## UI Preview
 Before development, I created rough UI mockups using screenshots and annotations to plan the layout and user flow.
 
+<h4>Sign-in Page</h4>
+<img src="public/markups/sign-in.png" alt="Sign-in page" width="25%" />
 
-![Sign-in](public/markups/sign-in.png)
 
-![Profile](public/markups/profile.png)
+<h4>Profile Page</h4>
+<img src="public/markups/profile.png" alt = "Profile page" width="25%" />
 
-![Homepage](public/markups/homepage.png)
 
-![Side-Nav](public/markups/side-nav.png)
+<h4>Homepage</h4>
+<img src="public/mockups/homepage.png" alt="Homepage mockup" width="25%" />
 
-![Recipe-Page](public/markups/recipe.png)
 
-![Rate-Recipe-Recipe-Page](public/markups/rate-recipe.png)
+<h4>Side Nav</h4>
+<img src="public/markups/side-nav.png" alt="Side navigation" width="25%">
 
-![Comments-Section-Recipe-Page](public/markups/comments-section.png)
+
+<h4>Recipe Page</h4>
+<img src="public/markups/recipe.png" alt="Recipe page" width="25%">
+
+
+<h4>Rate Recipe (Recipe Page)</h4>
+<img src="public/markups/rate-recipe.png" alt="Rate recipe" width="25%">
+
+
+<h4>Comments Section (Recipe Page)</h4>
+<img src="public/markups/comments-section.png" alt="Comments section" width="25%">
+
 
 
 *Note: UI sketch was inspired by Youtube's layout
