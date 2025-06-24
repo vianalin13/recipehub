@@ -25,31 +25,31 @@ As an upcoming feature, users will be able to paste recipe blog URLs and automat
 Before development, I created rough UI mockups using screenshots and annotations to plan the layout and user flow.
 
 <h4>Sign-in Page</h4>
-<img src="public/mockups/sign-in.png" alt="Sign-in page" width="40%" />
+<img src="public/mockups/sign-in.png" alt="Sign-in page" width="60%" />
 
 
 <h4>Profile Page</h4>
-<img src="public/mockups/profile.png" alt = "Profile page" width="40%" />
+<img src="public/mockups/profile.png" alt = "Profile page" width="60%" />
 
 
 <h4>Homepage</h4>
-<img src="public/mockups/homepage.png" alt="Homepage mockup" width="40%" />
+<img src="public/mockups/homepage.png" alt="Homepage mockup" width="60%" />
 
 
 <h4>Side Nav</h4>
-<img src="public/mockups/side-nav.png" alt="Side navigation" width="40%">
+<img src="public/mockups/side-nav.png" alt="Side navigation" width="60%" />
 
 
 <h4>Recipe Page</h4>
-<img src="public/mockups/recipe.png" alt="Recipe page" width="40%">
+<img src="public/mockups/recipe.png" alt="Recipe page" width="60%" />
 
 
 <h4>Rate Recipe (Recipe Page)</h4>
-<img src="public/mockups/rate-recipe.png" alt="Rate recipe" width="40%">
+<img src="public/mockups/rate-recipe.png" alt="Rate recipe" width="60%" />
 
 
 <h4>Comments Section (Recipe Page)</h4>
-<img src="public/mockups/comments-section.png" alt="Comments section" width="40%">
+<img src="public/mockups/comments-section.png" alt="Comments section" width="60%" />
 
 
 
@@ -64,6 +64,55 @@ Before development, I created rough UI mockups using screenshots and annotations
 - Rate and comment on recipes
 - Search and filter through saved or uploaded recipes
 - Paste recipe blog URLs to auto-extract ingredients and steps *(coming later)*
+
+---
+
+## Site Map
+
+Handwritten planning sketch to visualize structure and page links created on iPad:
+
+<img src="public/mockups/sitemap.png" alt="Sitemap" width="70%" />
+
+---
+
+## Data Models
+
+Handwritten planning sketch of the data models created on iPad:
+
+<img src="public/mockups/data-models.png" alt="Data model diagram showing User, Recipe, Rating, and Comment" width="60%" />
+
+### Final Typed Version (for reference)
+
+#### 1. User
+- `username`: String
+- `email`: String
+- `password`: String *(hashed)*
+- `bio`: String
+- `profileUrl`: String
+- `savedRecipes`: [ObjectId] (ref → Recipe)
+
+#### 2. Recipe
+- `title`: String
+- `ingredients`: [String]
+- `steps`: [String]
+- `imageUrl`: String
+- `createdAt`: Date *(default = now)*
+- `author`: ObjectId (ref → User)
+- `averageRating`: Number
+- `ratingCount`: Number
+
+#### 3. Rating
+- `user`: ObjectId (ref → User)
+- `recipe`: ObjectId (ref → Recipe)
+- `rating`: Number *(1-5)*
+- `createdAt`: Date *(default = now)*
+
+#### 4. Comment
+- `user`: ObjectId (ref → User)
+- `recipe`: ObjectId (ref → Recipe)
+- `text`: String
+- `ratingId`: ObjectId (ref → Rating, optional)
+- `createdAt`: Date *(default = now)*
 
 ---
 
