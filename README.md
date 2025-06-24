@@ -51,6 +51,11 @@ Before development, I created rough UI mockups using screenshots and annotations
 <h4>Comments Section (Recipe Page)</h4>
 <img src="public/mockups/comments-section.png" alt="Comments section" width="60%" />
 
+<h4>Upload New Recipe (Recipe Page)</h4>
+<img src="public/mockups/create-recipe.png" alt="Upload new recipe" width="60%" />
+
+
+
 
 
 *Note: UI sketch was inspired by Youtube's layout
