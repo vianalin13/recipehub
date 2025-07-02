@@ -1,9 +1,9 @@
-type Params = {
-  params: {id: string};
+interface PageProps {
+  params: {
+    id: string;
+  };
 }
 
-export default function Page({params}: Params) {
-  return(
-    <p>Recipe page for ID: {params.id}</p>
-  )
+export default function Page({params}: PageProps) {
+  return <p>Recipe page for ID: {params.id}</p>
 }
