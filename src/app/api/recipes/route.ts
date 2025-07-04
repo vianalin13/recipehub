@@ -1,0 +1,1 @@
+//or can do separate get.ts and post.ts

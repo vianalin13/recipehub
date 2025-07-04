@@ -125,7 +125,7 @@ Handwritten planning sketch of the data models created on iPad:
 
 - **Frontend**: React (via Next.js)
 - **Backend**: Next.js API Routes
-- **Database**: MongoDB Atlas
+- **Database**: PostgreSQL
 - **Authentication**: NextAuth.js
 - **Styling**: Tailwind CSS
 
