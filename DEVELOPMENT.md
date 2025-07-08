@@ -23,6 +23,8 @@ This log tracks the progress, major milestones, decisions, and planned features 
 
 2025-07-08
 - Configured ESLint with TypeScript and React best practices
+- Created TypeScript interfaces for all data models (User, Recipe, Rating, Comment)
+- **Reflection:** Planning the data structure early helped clarify relationships between entities
 
 ---
 
@@ -41,4 +43,3 @@ Planned and completed features for Recipehub:
 - [ ] Blog URL recipe extraction
 - [ ] Responsive design & accessibility
 - [ ] Deployment & CI/CD
-
