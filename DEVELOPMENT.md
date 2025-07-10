@@ -11,20 +11,30 @@ This log tracks the progress, major milestones, decisions, and planned features 
 - Created UI mockup images
 
 2025-06-24
-- Added sitemap, data models, logo
+- Created sitemap, data models, logo
 - Optimized fonts and images
+
+2025-06-25 to 2025-07-05
+- [Studied React and Next.js documentation](https://nextjs.org/learn)
+- Reviewed JavaScript fundamentals (ES6+ features, async/await, promises, destructuring)
+- Refreshed HTML semantics and accessibility best practices
+- **Reflection:** Coming from Express/Handlebars/MongoDB stack, this documentation helped me transition to React and understand modern web development concepts like static/dynamic rendering and SEO
 
 2025-07-01
 - Set up database: Vercel and PostgreSQL
 - Tested PostgreSQL by seeding and querying
+- **Reflection:** Initially planned to use MongoDB, but switched to PostgreSQL after learning it's better for relational data like recipes, ratings, and comments.
 
 2025-07-04
 - Set up base folders and app routes
 
-2025-07-08
+2025-07-06
 - Configured ESLint with TypeScript and React best practices
+- **Reflection:** Setting up linting early prevents bad habits and ensures consistent code quality. TypeScript strict mode caught several potential bugs.
+
+2025-07-08
 - Created TypeScript interfaces for all data models (User, Recipe, Rating, Comment)
-- **Reflection:** Planning the data structure early helped clarify relationships between entities
+- **Reflection:** Planning the data models early helped clarify relationships between entities
 
 ---
 
