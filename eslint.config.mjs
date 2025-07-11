@@ -24,7 +24,7 @@ const eslintConfig = [
       //best practices
       "eqeqeq": ["error", "always"],
       "no-unused-vars": ["warn", {"argsIgnorePattern": "^_"}],
-      "no-console": "warn",
+      //"no-console": "warn",
       "strict": ["error", "never"],
 
              //react/next.js

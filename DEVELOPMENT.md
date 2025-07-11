@@ -36,7 +36,14 @@ This log tracks the progress, major milestones, decisions, and planned features 
 - Created TypeScript interfaces for all data models (User, Recipe, Rating, Comment)
 - **Reflection:** Planning the data models early helped clarify relationships between entities
 
+2025-07-10
+- Implemented user registration with credentials (username, email, password)
+- Added password hashing with bcrypt for security
+- Connected registration form to PostgreSQL via Neon and Vercel
+- **Reflection** Setting up the database table in Neon via the Vercel integration helped me understand the difference between Typescript interfaces (for type safety in code) and the actual SQL table structures (for storing data).
+
 ---
+
 
 ## Feature Roadmap
 

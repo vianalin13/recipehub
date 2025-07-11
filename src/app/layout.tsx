@@ -1,7 +1,8 @@
 import "./globals.css";
 
-import { titilliumWeb } from "./fonts";
 import AuthProvider from "../components/AuthProvider";
+
+import { titilliumWeb } from "./fonts";
 
 export const metadata = {
   title: 'Recipe Hub', 
