@@ -46,6 +46,14 @@ This log tracks the progress, major milestones, decisions, and planned features 
 2025-07-11
 - Implemented user login with NextAuth credentials provider
 - **Reflection** Was initially confused about how the login process worked with NextAuth. I thought it would be more straightforward to manually import and call the authorize function from authentication but learned that NextAuth's built-in signIn function automatically handles the request, calls my custom authorize logic on the backend, and manages sessions securely behind the scenes.
+
+2025-07-12
+- Added Jest and Supertest tests for user registration API
+- Covered cases for successful registration, duplicates, missing fields, extra fields, database errors, and password hashing
+- **Reflection** While debugging tests, I learned the that string interpolation of the error doesn't log the full error object message. I also learned that using Date.now() to generate unique usernames and emails for each test run prevents conflicts so that the database doesn't need to be cleared between each run. 
+
+
+
 ---
 
 
