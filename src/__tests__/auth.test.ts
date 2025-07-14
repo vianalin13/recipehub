@@ -1,5 +1,6 @@
-import { Pool } from "pg";
 import bcrypt from "bcrypt";
+import { Pool } from "pg";
+
 import { authOptions } from "../app/api/auth/[...nextauth]/authOptions";
 
 const pool = new Pool({ connectionString: process.env.POSTGRES_URL });

@@ -1,5 +1,5 @@
-import request from "supertest";
 import { Pool } from "pg";
+import request from "supertest";
 
 const api = request("http://localhost:3000");
 const pool = new Pool({ connectionString: process.env.POSTGRES_URL });
@@ -103,7 +103,7 @@ describe("POST /api/auth/register", () => {
           console.error("Inner error:", err);
         }
       }
-      throw error
+      throw error;
     }
   });
 
