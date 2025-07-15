@@ -58,6 +58,10 @@ This log tracks the progress, major milestones, decisions, and planned features 
 - Created Playwright E2E tests for registration functionality (`tests/register.spec.ts`)
 - **Reflection:** Using `beforeEach` instead of `beforeAll` for generating unique test data prevents database conflicts between tests and taught me the importance of test isolation. Also discovered that proper label-input associations (`htmlFor` attributes) are crucial for Playwright's `getByLabel` selectors to work correctly. The combination of Jest unit tests and Playwright E2E tests provides coverage of both backend functionality and frontend user flows.
 
+2025-07-14
+- Finalized database schemas for users, recipes, ratings, comments, and saved recipes join table (`database-setup.sql`, `src/types/saved-recipe.ts`)
+- Updated all TypeScript interfaces in `src/types/` to match the new schema
+- **Reflection:** Adding a join table for saved recipes is more scalable. Adding indexes for major foreign keys optimize query performance. 
 ---
 
 
@@ -69,7 +73,7 @@ Planned and completed features for Recipehub:
 - [x] Project scaffolding (Next.js, TypeScript, Tailwind)
 - [x] ESLint setup
 - [x] PostgreSQL integration
-- [ ] User authentication (NextAuth.js)
+- [x] User authentication (NextAuth.js)
 - [ ] Recipe CRUD (Create, Read, Update, Delete)
 - [ ] Ratings & Comments
 - [ ] Search & Filter

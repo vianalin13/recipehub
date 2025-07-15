@@ -1,12 +1,12 @@
 export interface Recipe {
-  id: string;
+  id: number;
+  authorId: number;
   title: string;
+  imageUrl?: string;
   ingredients: string[];
   steps: string[];
-  imageUrl?: string;
-  createdAt: Date;
-  //updatedAt
-  authorId: string;
   averageRating?: number; //new recipes start with no rating
   ratingCount?: number;
+  createdAt: Date;
+  updatedAt: Date;
 }

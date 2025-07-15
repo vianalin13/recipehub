@@ -1,10 +1,10 @@
 export interface User {
-  id: string;
+  id: number;
   username: string;
   email: string;
   password: string; //hashed
   bio?: string; //optional bio and profile url
   profileUrl?: string;
-  savedRecipes: string[]; //array of recipe ids
-  //createdAt and updatedAt date
+  createdAt: Date;
+  updatedAt: Date;
 }

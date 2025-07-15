@@ -1,7 +1,8 @@
 export interface Rating {
-  id: string; //easier to update/delete specific ratings
-  userId: string;
-  recipeId: string;
+  id: number; //easier to update/delete specific ratings
+  userId: number;
+  recipeId: number;
   rating: number; //1-5
   createdAt: Date;
+  updatedAt: Date;
 }
