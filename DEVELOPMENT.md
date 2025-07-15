@@ -34,25 +34,29 @@ This log tracks the progress, major milestones, decisions, and planned features 
 - **Reflection:** Using TypeScript made me to think more carefully about data structures.
 
 2025-07-08
-- Created TypeScript interfaces for all data models (User, Recipe, Rating, Comment)
+- Created TypeScript interfaces for all data models (User, Recipe, Rating, Comment) (`src/types/user.ts`, `src/types/recipe.ts`, `src/types/rating.ts`, `src/types/comment.ts`)
 - **Reflection:** Planning the data models early helped clarify relationships between entities
 
 2025-07-10
-- Implemented user registration with credentials (username, email, password)
+- Implemented user registration with credentials (username, email, password) (`src/app/register/page.tsx`, `src/app/api/auth/register/route.ts`)
 - Added password hashing with bcrypt for security
 - Connected registration form to PostgreSQL via Neon and Vercel
-- **Reflection** Setting up the database table in Neon via the Vercel integration helped me understand the difference between Typescript interfaces (for type safety in code) and the actual SQL table structures (for storing data).
+- **Reflection:** Setting up the database table in Neon via the Vercel integration helped me understand the difference between TypeScript interfaces (for type safety in code) and the actual SQL table structures (for storing data).
 
 2025-07-11
-- Implemented user login with NextAuth credentials provider
-- **Reflection** Was initially confused about how the login process worked with NextAuth. I thought it would be more straightforward to manually import and call the authorize function from authentication but learned that NextAuth's built-in signIn function automatically handles the request, calls my custom authorize logic on the backend, and manages sessions securely behind the scenes.
+- Implemented user login with NextAuth credentials provider (`src/app/login/page.tsx`, `src/app/api/auth/[...nextauth]/authOptions.ts`, `src/app/api/auth/[...nextauth]/route.ts`)
+- **Reflection:** Was initially confused about how the login process worked with NextAuth. I thought it would be more straightforward to manually import and call the authorize function from authentication but learned that NextAuth's built-in signIn function automatically handles the request, calls my custom authorize logic on the backend, and manages sessions securely behind the scenes.
 
 2025-07-12
-- Added Jest and Supertest tests for user registration API
+- Added Jest and Supertest tests for user registration API (`src/__tests__/register.test.ts`)
 - Covered cases for successful registration, duplicates, missing fields, extra fields, database errors, and password hashing
-- **Reflection** While debugging tests, I learned the that string interpolation of the error doesn't log the full error object message. I also learned that using Date.now() to generate unique usernames and emails for each test run prevents conflicts so that the database doesn't need to be cleared between each run. 
+- **Reflection:** While debugging tests, I learned that string interpolation of the error doesn't log the full error object message. I also learned that using Date.now() to generate unique usernames and emails for each test run prevents conflicts so that the database doesn't need to be cleared between each run.
 
-
+2025-07-13
+- Added Jest tests for NextAuth authorization logic (`src/__tests__/auth.test.ts`)
+- Created Playwright E2E tests for login functionality (`tests/login.spec.ts`)
+- Created Playwright E2E tests for registration functionality (`tests/register.spec.ts`)
+- **Reflection:** Using `beforeEach` instead of `beforeAll` for generating unique test data prevents database conflicts between tests and taught me the importance of test isolation. Also discovered that proper label-input associations (`htmlFor` attributes) are crucial for Playwright's `getByLabel` selectors to work correctly. The combination of Jest unit tests and Playwright E2E tests provides coverage of both backend functionality and frontend user flows.
 
 ---
 

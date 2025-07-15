@@ -55,12 +55,13 @@ export default function RegisterPage() {
         )}
 
         <div>
-          <label>username</label>
+          <label htmlFor="username">username</label>
           <input
             id="username"
             name="username"
             type="username"
             required
+            disabled={loading}
             value={formData.username}
             onChange={(e) =>
               setFormData({...formData, username: e.target.value})
@@ -69,12 +70,13 @@ export default function RegisterPage() {
         </div>
 
         <div>
-          <label>email</label>
+          <label htmlFor="email">email</label>
           <input
             id="email"
             name="email"
             type="email"
             required
+            disabled={loading}
             value={formData.email}
             onChange={(e) =>
               setFormData({...formData, email: e.target.value})
@@ -83,17 +85,19 @@ export default function RegisterPage() {
         </div>
 
         <div>
-          <label>password</label>
+          <label htmlFor="password">password</label>
           <input
             id="password"
             name="password"
             type="password"
             required
+            disabled={loading}
             value={formData.password}
             onChange={(e) =>
               setFormData({...formData, password: e.target.value})
             }
           />
+          
         </div>
 
         <button type="submit" disabled={loading}>
