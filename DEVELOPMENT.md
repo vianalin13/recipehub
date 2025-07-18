@@ -62,6 +62,10 @@ This log tracks the progress, major milestones, decisions, and planned features 
 - Finalized database schemas for users, recipes, ratings, comments, and saved recipes join table (`database-setup.sql`, `src/types/saved-recipe.ts`)
 - Updated all TypeScript interfaces in `src/types/` to match the new schema
 - **Reflection:** Adding a join table for saved recipes is more scalable. Adding indexes for major foreign keys optimize query performance. 
+
+2025-07-16
+- Finished backend and basic frontend for creating a new recipe (`src/app/recipe/new/page.tsx`, `src/app/api/recipes/route.ts`)
+- **Reflection:** Ingredients and steps use the same features and format, so making a reusable function reduces duplication
 ---
 
 
