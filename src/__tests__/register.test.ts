@@ -4,7 +4,7 @@ import request from "supertest";
 const api = request("http://localhost:3000");
 const pool = new Pool({ connectionString: process.env.POSTGRES_URL });
 
-describe("POST /api/auth/register", () => {
+describe("POST /api/auth/register - User Registration", () => {
   it("registers a new user", async () => {
     const res = await api.post("/api/auth/register").send({
       username: `testuser_${Date.now()}`,

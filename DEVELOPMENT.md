@@ -53,7 +53,7 @@ This log tracks the progress, major milestones, decisions, and planned features 
 - **Reflection:** While debugging tests, I learned that string interpolation of the error doesn't log the full error object message. I also learned that using Date.now() to generate unique usernames and emails for each test run prevents conflicts so that the database doesn't need to be cleared between each run.
 
 2025-07-13
-- Added Jest tests for NextAuth authorization logic (`src/__tests__/auth.test.ts`)
+- Added Jest test for NextAuth authorization logic (`src/__tests__/auth.test.ts`)
 - Created Playwright E2E tests for login functionality (`tests/login.spec.ts`)
 - Created Playwright E2E tests for registration functionality (`tests/register.spec.ts`)
 - **Reflection:** Using `beforeEach` instead of `beforeAll` for generating unique test data prevents database conflicts between tests and taught me the importance of test isolation. Also discovered that proper label-input associations (`htmlFor` attributes) are crucial for Playwright's `getByLabel` selectors to work correctly. The combination of Jest unit tests and Playwright E2E tests provides coverage of both backend functionality and frontend user flows.
@@ -66,6 +66,11 @@ This log tracks the progress, major milestones, decisions, and planned features 
 2025-07-16
 - Finished backend and basic frontend for creating a new recipe (`src/app/recipe/new/page.tsx`, `src/app/api/recipes/route.ts`)
 - **Reflection:** Ingredients and steps use the same features and format, so making a reusable function reduces duplication
+
+2025-07-19
+- Added Jest test for recipe creation API (`src/__tests__/create-recipe.test.ts`)
+- Includes 17 test cases covering authentication, validation, data filtering, and database storage
+- **Reflection:** Initially struggled with NextAuth session cookies in tests - they were redirecting (302) instead of creating sessions. Learned that NextAuth is designed for browser-based authentication, not API testing. Researched and found that it is standard to actually bypass authentication with test headers (`x-test-user-email`). This approach tests all business logic (validation, database storage, error handling) without complex session management. The key insight: don't fight the framework - create a "test mode" that bypasses complex authentication while testing all the important functionality.
 ---
 
 
