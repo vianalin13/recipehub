@@ -1,9 +1,10 @@
 import bcrypt from "bcrypt";
-import { Pool } from "pg";
+
+import pool from "@/lib/db";
 
 import { authOptions } from "../app/api/auth/[...nextauth]/authOptions";
 
-const pool = new Pool({ connectionString: process.env.POSTGRES_URL });
+//authOptions imports a pool so if we create a pool to use, it won't actually be used
 const authorizeFunction = authOptions.providers.find(
   (provider) => provider.id === "credentials"
 )?.options?.authorize;
@@ -12,20 +13,19 @@ if (!authorizeFunction) {
   throw new Error("custom authorize function not found on credentials provider");
 }
 
-const username = `authuser${Date.now()}`;
-const email = `authuser${Date.now()}@example.com`;
-const password = "password123";
-
-beforeAll(async () => {
-  const hashedPassword = await bcrypt.hash(password, 10);
-  
-  await pool.query(
-    "INSERT INTO users (username, email, password) VALUES ($1, $2, $3)",
-    [username, email, hashedPassword]
-  );
-});
-
 describe("NextAuth authorize", () => {
+  const username = `authuser${Date.now()}`;
+  const email = `authuser${Date.now()}@example.com`;
+  const password = "password123";
+
+  beforeAll(async () => {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    
+    await pool.query(
+      "INSERT INTO users (username, email, password) VALUES ($1, $2, $3)",
+      [username, email, hashedPassword]
+    );
+  });
   it("logs in with correct username and password", async () => {      
     const user = await authorizeFunction({
       username,
@@ -79,6 +79,12 @@ describe("NextAuth authorize", () => {
   });
 
   afterAll(async () => {
+    // Clean up test user
+    await pool.query(
+      "DELETE FROM users WHERE username = $1 OR email = $2",
+      [username, email]
+    );
+    // Close the pool connection
     await pool.end();
   });
 });
