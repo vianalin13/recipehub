@@ -71,6 +71,15 @@ This log tracks the progress, major milestones, decisions, and planned features 
 - Added Jest test for recipe creation API (`src/__tests__/create-recipe.test.ts`)
 - Includes 17 test cases covering authentication, validation, data filtering, and database storage
 - **Reflection:** Initially struggled with NextAuth session cookies in tests - they were redirecting (302) instead of creating sessions. Learned that NextAuth is designed for browser-based authentication, not API testing. Researched and found that it is standard to actually bypass authentication with test headers (`x-test-user-email`). This approach tests all business logic (validation, database storage, error handling) without complex session management. The key insight: don't fight the framework - create a "test mode" that bypasses complex authentication while testing all the important functionality.
+
+2025-07-20
+- Fixed Jest test issue with pool not closing (`src/__tests__/auth.test.ts`)
+- **Reflection:** `authOptions` import already creates a database pool, so creating a new pool in tests would result in two separate pools that are running and one not being closed properly. In this case, it's best to reuse the existing pool instead of creating a new one. 
+
+- Fixed Playwright test issues with database pool conflict (`tests/login.spec.ts`, `tests/register.spec.ts`)
+- **Reflection:** 
+  - When running multiple Playwright test files (`login.spec.ts` and `register.spec.ts`) together, both files were creating their own database pools and calling `pool.end()`. This caused "Cannot use a pool after calling end on the pool" errors because when tests run in parallel, one test file would finish and close its pool while the other was still trying to use it. Each test file should create their own isolated pool instead of sharing a global pool to ensure proper isolation between test suites.
+  - Spent 5 hours debugging unexpected errors because I ran `npx playwright test` instead of `npm run test:e2e`. The npm script includes proper project configuration (environment variables, webServer setup, etc.) while `npx playwright test` runs the tests without these configurations, causing numerous errors. Always use project's npm scripts for testing to ensure proper setup and configuration
 ---
 
 

@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import bcrypt from "bcrypt";
 import { Pool } from "pg";
 
-const pool = new Pool({ connectionString: process.env.POSTGRES_URL });
+let pool: Pool;
 
 test.describe("Registration", () => {
 
@@ -10,6 +10,13 @@ test.describe("Registration", () => {
   let username: string;
   let email: string;
   const password = "password123";
+
+  test.beforeAll(async () => {
+    pool = new Pool({ 
+      connectionString: process.env.POSTGRES_URL,
+      application_name: 'register-tests'
+    });
+  });
 
   // test.beforeAll(async () => {
   //   const timestamp = Date.now();

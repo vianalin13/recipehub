@@ -2,7 +2,8 @@ import {test, expect} from "@playwright/test";
 import bcrypt from "bcrypt";
 import { Pool } from "pg";
 
-const pool = new Pool({ connectionString: process.env.POSTGRES_URL });
+//create a unique pool for this test file
+let pool: Pool;
 
 test.describe("Login", () => {
   let username: string;
@@ -10,6 +11,12 @@ test.describe("Login", () => {
   const password = "password123";
 
   test.beforeAll(async () => {
+    //initialize pool for this test suite
+    pool = new Pool({ 
+      connectionString: process.env.POSTGRES_URL,
+      application_name: 'login-tests'
+    });
+    
     const timestamp = Date.now();
     const randomId = Math.random().toString(36).substring(2, 11);
     username = `loginuser${timestamp}-${randomId}`;
