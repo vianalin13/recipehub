@@ -64,7 +64,7 @@ This log tracks the progress, major milestones, decisions, and planned features 
 - **Reflection:** Adding a join table for saved recipes is more scalable. Adding indexes for major foreign keys optimize query performance. 
 
 2025-07-16
-- Finished backend and basic frontend for creating a new recipe (`src/app/recipe/new/page.tsx`, `src/app/api/recipes/route.ts`)
+- Finished backend and basic frontend for creating a new recipe (`src/app/api/recipes/route.ts`, `src/app/recipe/new/page.tsx`)
 - **Reflection:** Ingredients and steps use the same features and format, so making a reusable function reduces duplication
 
 2025-07-19
@@ -80,6 +80,10 @@ This log tracks the progress, major milestones, decisions, and planned features 
 - **Reflection:** 
   - When running multiple Playwright test files (`login.spec.ts` and `register.spec.ts`) together, both files were creating their own database pools and calling `pool.end()`. This caused "Cannot use a pool after calling end on the pool" errors because when tests run in parallel, one test file would finish and close its pool while the other was still trying to use it. Each test file should create their own isolated pool instead of sharing a global pool to ensure proper isolation between test suites.
   - Spent 5 hours debugging unexpected errors because I ran `npx playwright test` instead of `npm run test:e2e`. The npm script includes proper project configuration (environment variables, webServer setup, etc.) while `npx playwright test` runs the tests without these configurations, causing numerous errors. Always use project's npm scripts for testing to ensure proper setup and configuration
+
+2025-07-21
+-  Finished backend and basic frontend for individual recipe page by id (`src/app/api/recipes/[id]/route.ts`, `src/app/recipe/[id]/page.tsx`) 
+-  **Reflection:** Next.js encourages the use of `<Image />` for image optimization, but it requires explicitly listing every allowed image domain in the config. For user-pasted or arbitrary image URLs, this is impractical, so using `<img>` is more flexible.
 ---
 
 
