@@ -28,7 +28,13 @@ export default function RegisterPage() {
         body: JSON.stringify(formData),
       });
 
-      const data = await response.json();
+      let data;
+      try {
+        data = await response.json();
+      } catch {
+        data = {};
+      }
+      console.log('Register API response:', data);
       
       if(!response.ok) {
         setError(data.error || "Registration failed");
@@ -51,7 +57,7 @@ export default function RegisterPage() {
 
       <form onSubmit={handleSubmit}>
         {error && (
-          <p>{error}</p>
+          <p data-testid="register-error">{error}</p>
         )}
 
         <div>

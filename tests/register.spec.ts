@@ -2,11 +2,10 @@ import { test, expect } from "@playwright/test";
 import bcrypt from "bcrypt";
 import { Pool } from "pg";
 
-let pool: Pool;
+test.describe.configure({ mode: 'serial' });
 
 test.describe("Registration", () => {
-
-  //register 
+  let pool: Pool;
   let username: string;
   let email: string;
   const password = "password123";
@@ -18,25 +17,11 @@ test.describe("Registration", () => {
     });
   });
 
-  // test.beforeAll(async () => {
-  //   const timestamp = Date.now();
-  //   const randomId = Math.random().toString(36).substring(2, 11);
-  //   username = `registeruser${timestamp}-${randomId}`;
-  //   email = `registeruser${timestamp}-${randomId}@example.com`;
-      
-  //   // const hashedPassword = await bcrypt.hash(password, 10);
-  //   // await pool.query(
-  //   //   "INSERT INTO users (username, email, password) VALUES ($1, $2, $3)",
-  //   //   [username, email, hashedPassword]
-  //   // );
-  // });
-
-  test.beforeEach(async ({page}) => {
+  test.beforeEach(async ({ page }) => {
     const timestamp = Date.now();
     const randomId = Math.random().toString(36).substring(2, 11);
     username = `registeruser${timestamp}-${randomId}`;
     email = `registeruser${timestamp}-${randomId}@example.com`;
-  
     await page.goto("/register");
   });
   
@@ -60,7 +45,8 @@ test.describe("Registration", () => {
   }); 
   
   //should not register successfully with invalid username (already exists)
-  test("should not register successfully with invalid username (already exists)", async ({page}) => {
+  test("should not register successfully with invalid username (already exists)", async ({ page }) => {
+    // Insert the user to create a duplicate
     const hashedPassword = await bcrypt.hash(password, 10);
     await pool.query(
       "INSERT INTO users (username, email, password) VALUES ($1, $2, $3)",
@@ -74,7 +60,10 @@ test.describe("Registration", () => {
     await page.getByLabel("email").fill("newemail@example.com");
     await page.getByLabel("password").fill(password);
     await page.getByRole("button", {name: "Register"}).click();
-    await expect(page.getByText("User already exists")).toBeVisible({timeout: 15000});
+    await page.waitForTimeout(2000);
+    const error = page.locator('[data-testid="register-error"]');
+    await expect.poll(async () => await error.isVisible(), { timeout: 10000 }).toBe(true);
+    await expect(error).toContainText("User already exists");
     await expect(page).toHaveURL("/register");
   });
 
@@ -90,7 +79,7 @@ test.describe("Registration", () => {
     await page.getByLabel("email").fill(email);
     await page.getByLabel("password").fill(password);
     await page.getByRole("button", {name: "Register"}).click();
-    await expect(page.getByText("User already exists")).toBeVisible({timeout: 15000});
+    await expect(page.getByTestId("register-error")).toHaveText("User already exists");
     await expect(page).toHaveURL("/register");
   });
 
@@ -168,7 +157,7 @@ test.describe("Registration", () => {
     await page.getByLabel("password").fill(password);
     await page.getByRole("button", {name: "Register"}).click();
 
-    await expect(page.getByText("User already exists")).toBeVisible({timeout: 15000});
+    await expect(page.getByTestId("register-error")).toHaveText("User already exists");
 
     //clear form and try with new data 
     await page.getByLabel("username").fill("newuser123");
@@ -177,11 +166,10 @@ test.describe("Registration", () => {
     await page.getByRole("button", {name: "Register"}).click();
     await expect(page).toHaveURL("/login");
   });
-  
+
   test.afterAll(async () => {
-    await pool.query(
-      "DELETE FROM users WHERE username LIKE 'registeruser%' OR username LIKE 'newuser%'"
-    );
+    //clean up after all tests
+    await pool.query("DELETE FROM users WHERE username LIKE 'registeruser%' OR username LIKE 'newuser%'");
     await pool.end();
   });
 });

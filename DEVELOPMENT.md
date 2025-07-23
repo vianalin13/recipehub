@@ -86,13 +86,24 @@ This log tracks the progress, major milestones, decisions, and planned features 
 - **Reflection:** Next.js encourages the use of `<Image />` for image optimization, but it requires explicitly listing every allowed image domain in the config. For user-pasted or arbitrary image URLs, this is impractical, so using `<img>` is more flexible.
 
 2025-07-22
-- 
 - Added Jest and Playwright tests for recipe detail page by ID (`src/__tests__/recipe-id.test.ts`, `tests/recipe-id.spec.ts`)
 - Improved registration API error handling with proper PostgreSQL duplicate key error detection (`src\app\api\auth\register\route.ts`)
 - **Reflection:** Replaced `as any` with proper `PostgreSQLError` interface for type safety.Using `as any` disables type safety and can hide bugs, while using a proper interface lets TypeScript catch errors before they happen. 
 
+2025-07-23
+- Fixed test error in  `tests/register.spec.ts` by running tests in serial mode.
+- **Reflection:** Running E2E tests in serial is not best practice for large-scale projects, but for now it ensures my tests are reliable and my features are covered. In the future, I plan to refactor for full parallel safety using per-test unique data and cleanup. 
+
 ---
 
+## Future Improvements
+
+- **Refactor E2E tests in the `tests/` folder for parallel safety:**  
+  Update all E2E tests to use UUIDs for unique test data and remove global cleanup. This will allow tests to run in parallel without risk of data collisions or race conditions, making the suite faster and more scalable for CI/CD.
+
+
+
+---
 
 ## Feature Roadmap
 
@@ -109,3 +120,5 @@ Planned and completed features for Recipehub:
 - [ ] Blog URL recipe extraction
 - [ ] Responsive design & accessibility
 - [ ] Deployment & CI/CD
+
+---
