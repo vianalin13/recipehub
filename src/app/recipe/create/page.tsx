@@ -195,7 +195,6 @@ export default function CreateRecipePage() {
             className="w-full border rounded"
             value={formData.imageUrl}
             onChange={e => handleInputChange("imageUrl", e.target.value)}
-            required
             disabled={loading}
           />
         </div>

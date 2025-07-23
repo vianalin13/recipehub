@@ -48,14 +48,14 @@ This log tracks the progress, major milestones, decisions, and planned features 
 - **Reflection:** Was initially confused about how the login process worked with NextAuth. I thought it would be more straightforward to manually import and call the authorize function from authentication but learned that NextAuth's built-in signIn function automatically handles the request, calls my custom authorize logic on the backend, and manages sessions securely behind the scenes.
 
 2025-07-12
-- Added Jest and Supertest tests for user registration API (`src/__tests__/register.test.ts`)
+- Added Jest test for user registration API (`src/__tests__/register.test.ts`)
 - Covered cases for successful registration, duplicates, missing fields, extra fields, database errors, and password hashing
 - **Reflection:** While debugging tests, I learned that string interpolation of the error doesn't log the full error object message. I also learned that using Date.now() to generate unique usernames and emails for each test run prevents conflicts so that the database doesn't need to be cleared between each run.
 
 2025-07-13
 - Added Jest test for NextAuth authorization logic (`src/__tests__/auth.test.ts`)
-- Created Playwright E2E tests for login functionality (`tests/login.spec.ts`)
-- Created Playwright E2E tests for registration functionality (`tests/register.spec.ts`)
+- Added Playwright E2E tests for login functionality (`tests/login.spec.ts`)
+- Added Playwright E2E tests for registration functionality (`tests/register.spec.ts`)
 - **Reflection:** Using `beforeEach` instead of `beforeAll` for generating unique test data prevents database conflicts between tests and taught me the importance of test isolation. Also discovered that proper label-input associations (`htmlFor` attributes) are crucial for Playwright's `getByLabel` selectors to work correctly. The combination of Jest unit tests and Playwright E2E tests provides coverage of both backend functionality and frontend user flows.
 
 2025-07-14
@@ -82,8 +82,15 @@ This log tracks the progress, major milestones, decisions, and planned features 
   - Spent 5 hours debugging unexpected errors because I ran `npx playwright test` instead of `npm run test:e2e`. The npm script includes proper project configuration (environment variables, webServer setup, etc.) while `npx playwright test` runs the tests without these configurations, causing numerous errors. Always use project's npm scripts for testing to ensure proper setup and configuration
 
 2025-07-21
--  Finished backend and basic frontend for individual recipe page by id (`src/app/api/recipes/[id]/route.ts`, `src/app/recipe/[id]/page.tsx`) 
--  **Reflection:** Next.js encourages the use of `<Image />` for image optimization, but it requires explicitly listing every allowed image domain in the config. For user-pasted or arbitrary image URLs, this is impractical, so using `<img>` is more flexible.
+- Finished backend and basic frontend for individual recipe page by id (`src/app/api/recipes/[id]/route.ts`, `src/app/recipe/[id]/page.tsx`) 
+- **Reflection:** Next.js encourages the use of `<Image />` for image optimization, but it requires explicitly listing every allowed image domain in the config. For user-pasted or arbitrary image URLs, this is impractical, so using `<img>` is more flexible.
+
+2025-07-22
+- 
+- Added Jest and Playwright tests for recipe detail page by ID (`src/__tests__/recipe-id.test.ts`, `tests/recipe-id.spec.ts`)
+- Improved registration API error handling with proper PostgreSQL duplicate key error detection (`src\app\api\auth\register\route.ts`)
+- **Reflection:** Replaced `as any` with proper `PostgreSQLError` interface for type safety.Using `as any` disables type safety and can hide bugs, while using a proper interface lets TypeScript catch errors before they happen. 
+
 ---
 
 
