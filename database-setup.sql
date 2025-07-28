@@ -16,7 +16,7 @@ CREATE TABLE recipes (
   id SERIAL PRIMARY KEY,
   author_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   title VARCHAR(255) NOT NULL,
-  image_url VARCHAR(500),
+  image_url TEXT,
   ingredients TEXT[] NOT NULL,
   steps TEXT[] NOT NULL,
   average_rating REAL,

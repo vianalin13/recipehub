@@ -120,7 +120,6 @@ export default function CreateRecipePage() {
             className="flex-1 border rounded"
             value={item}
             onChange={e => handleArrayChange(field, idx, e.target.value)}
-            required
             disabled={loading}
             placeholder={placeholder + " " + (idx+1)}
           />
