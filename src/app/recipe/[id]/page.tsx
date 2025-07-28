@@ -1,5 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 import { notFound } from "next/navigation";
+import { getServerSession } from "next-auth";
+
+import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
+import pool from "@/lib/db";
+
+import EditButton from "./EditButton";
 
 interface Recipe {
   id: number;
@@ -12,13 +18,18 @@ interface Recipe {
   created_at: string;
   updated_at: string;
   author_name: string;
+  author_id: number;
 }
 
 export default async function RecipeIdPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+
   if (isNaN(Number(id))) {
     notFound();
   }
+
+  //get session for author verifcation
+  const session = await getServerSession(authOptions);
 
   //use absolute URL for server-side fetches
   const baseUrl =
@@ -42,10 +53,24 @@ export default async function RecipeIdPage({ params }: { params: Promise<{ id: s
   const data = await res.json();
   const recipe: Recipe = data.recipe;
 
+  let isAuthor = false;
+  if(session?.user?.email) {
+    const userResult = await pool.query(
+      "SELECT id FROM users WHERE email = $1",
+      [session.user.email]
+    );
+    isAuthor = userResult.rows.length > 0 && userResult.rows[0].id === recipe.author_id;
+  }
   return (
     <div className="p-8 max-w-2xl">
-      <h1 className="text-3xl font-bold">{recipe.title}</h1>
-      <p className="text-gray-600"> By {recipe.author_name}</p>
+      <div className="flex justify-between items-start">
+        <div>
+          <h1 className="text-3xl font-bold">{recipe.title}</h1>
+          <p className="text-gray-600"> By {recipe.author_name}</p>
+        </div>
+        {isAuthor && <EditButton recipeId={recipe.id} />}
+      </div>
+    
       {recipe.image_url && (
         <img
           src={recipe.image_url}
@@ -60,7 +85,14 @@ export default async function RecipeIdPage({ params }: { params: Promise<{ id: s
       )}
 
       <div className="mb-4">
-        <span className="text-sm text-gray-500">Created: {new Date(recipe.created_at).toLocaleString()}</span>
+        <div className="text-sm text-gray-500">
+          Created: {new Date(recipe.created_at).toLocaleString()}
+        </div>
+        {recipe.updated_at !== recipe.created_at && (
+          <div className="text-sm text-gray-500">
+            Updated: {new Date(recipe.updated_at).toLocaleString()}
+          </div>
+        )}
       </div>
 
       <div className="pl-6">

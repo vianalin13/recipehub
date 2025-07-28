@@ -64,7 +64,7 @@ This log tracks the progress, major milestones, decisions, and planned features 
 - **Reflection:** Adding a join table for saved recipes is more scalable. Adding indexes for major foreign keys optimize query performance. 
 
 2025-07-16
-- Finished backend and basic frontend for creating a new recipe (`src/app/api/recipes/route.ts`, `src/app/recipe/new/page.tsx`)
+- Implemented backend and basic frontend for creating a new recipe (`src/app/api/recipes/route.ts`, `src/app/recipe/new/page.tsx`)
 - **Reflection:** Ingredients and steps use the same features and format, so making a reusable function reduces duplication
 
 2025-07-19
@@ -92,7 +92,18 @@ This log tracks the progress, major milestones, decisions, and planned features 
 
 2025-07-23
 - Fixed test error in  `tests/register.spec.ts` by running tests in serial mode.
-- **Reflection:** Running E2E tests in serial is not best practice for large-scale projects, but for now it ensures my tests are reliable and my features are covered. In the future, I plan to refactor for full parallel safety using per-test unique data and cleanup. 
+- **Reflection:** Running E2E tests in serial is not best practice for large-scale projects, but for now it ensures my tests are reliable and my features are covered. In the future, I plan to refactor for full parallel safety using per-test unique data and cleanup.
+
+2025-07-25
+- **Reflection:** Spent significant time working on Playwright E2E tests for recipe creation, but realized this was premature. E2E testing is more valuable when the UI is complete and stable. At this development stage, focusing on Jest unit tests provides better ROI and faster feedback cycles.
+
+2025-07-26
+- Implemented backend and basic frontend for recipe editing functionality 
+  - API Route for PUT - (`src/app/api/recipes/[id]/route.ts`)
+  - Server Component: Recipe detail page (`src/app/recipe/[id]/page.tsx`) with server-side authentication and author verification
+  - Client Component: Edit button (`src/app/recipe/[id]/EditButton.tsx`) 
+  - Edit Form: (`src/app/recipe/[id]/edit/page.tsx`)
+- **Reflection:** The create and edit forms share a significant amount of code. While backend optimization (shared validation, auth helpers) is valuable, frontend abstraction can reduce readability. Each page has specific needs, so keeping forms similar but separate maintains clarity over cleverness. Sometimes readable code is preferable to overly abstracted solutions. 
 
 ---
 
@@ -114,7 +125,7 @@ Planned and completed features for Recipehub:
 - [x] ESLint setup
 - [x] PostgreSQL integration
 - [x] User authentication (NextAuth.js)
-- [ ] Recipe CRUD (Create, Read, Update, Delete)
+- [x] Recipe CRUD (Create, Read, Update, Delete)
 - [ ] Ratings & Comments
 - [ ] Search & Filter
 - [ ] Blog URL recipe extraction
