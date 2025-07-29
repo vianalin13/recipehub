@@ -11,7 +11,6 @@ describe("PUT /api/recipes/:id - Recipe Editing", () => {
   let testUser: {id: number; username: string; email: string};
   let otherUser: {id: number; username: string; email: string};
   let testRecipeId: number;
-  let sessionCookie: string; 
 
   beforeAll(async () => {
     //create user for authentication
@@ -36,7 +35,7 @@ describe("PUT /api/recipes/:id - Recipe Editing", () => {
     const otherTimestamp = Date.now();
     const otherRandom = Math.random().toString(36).substring(7);
     const otherUsername = `otheruser_${otherTimestamp}_${otherRandom}`;
-    const otherEmail = `otheruser_${otherTimestamp}_${otherRandom}@example.com`
+    const otherEmail = `otheruser_${otherTimestamp}_${otherRandom}@example.com`;
 
     const otherResult = await pool.query(`
       INSERT INTO users (username, email, password)
@@ -56,12 +55,9 @@ describe("PUT /api/recipes/:id - Recipe Editing", () => {
     );
 
     testRecipeId = recipeResult.rows[0].id;
-
-    //custom header bypass nextauth
-    sessionCookie = `x-test-user-email=${testUser.email}`;
   });
 
-  beforeEach(async() => {
+  beforeEach(async () => {
     //reset recipe to original state before each test
     await pool.query(`
       UPDATE recipes
@@ -71,7 +67,12 @@ describe("PUT /api/recipes/:id - Recipe Editing", () => {
     );
   });
 
-  
+  afterAll(async () => {
+    //clean up
+    await pool.query("DELETE FROM users WHERE id IN ($1, $2)", [testUser.id, otherUser.id]);
+    await pool.end();
+  });
+
   //returns 401 when not authenticated
   it("returns 401 when not authenticated", async () => {
     const recipeData = { 
@@ -95,7 +96,7 @@ describe("PUT /api/recipes/:id - Recipe Editing", () => {
       imageUrl: "http://example.com/updated.jpg",
       ingredients: ["Updated ingredient 1", "Updated ingredient 2"],
       steps: ["Updated step 1", "Updated step 2"]
-    }
+    };
 
     const res = await api.put(`/api/recipes/${testRecipeId}`)
       .send(recipeData)
@@ -330,7 +331,7 @@ describe("PUT /api/recipes/:id - Recipe Editing", () => {
       imageUrl: "http://example.com/updated.jpg",
       ingredients: ["Updated ingredient 1", "Updated ingredient 2"],
       steps: ["Updated step 1", "Updated step 2"]
-    }
+    };
 
     const res = await api.put(`/api/recipes/${testRecipeId}`)
       .send(recipeData)
@@ -347,7 +348,7 @@ describe("PUT /api/recipes/:id - Recipe Editing", () => {
       imageUrl: 123,
       ingredients: ["Updated ingredient 1", "Updated ingredient 2"],
       steps: ["Updated step 1", "Updated step 2"]
-    }
+    };
 
     const res = await api.put(`/api/recipes/${testRecipeId}`)
       .send(recipeData)
@@ -364,7 +365,7 @@ describe("PUT /api/recipes/:id - Recipe Editing", () => {
       imageUrl: "http://example.com/updated.jpg",
       ingredients: "hi",
       steps: ["Updated step 1", "Updated step 2"]
-    }
+    };
 
     const res = await api.put(`/api/recipes/${testRecipeId}`)
       .send(recipeData)
@@ -381,7 +382,7 @@ describe("PUT /api/recipes/:id - Recipe Editing", () => {
       imageUrl: "http://example.com/updated.jpg",
       ingredients: ["Updated ingredient 1", "Updated ingredient 2"],
       steps: "hi"
-    }
+    };
 
     const res = await api.put(`/api/recipes/${testRecipeId}`)
       .send(recipeData)
@@ -398,7 +399,7 @@ describe("PUT /api/recipes/:id - Recipe Editing", () => {
       imageUrl: "http://example.com/updated.jpg",
       ingredients: ["Updated ingredient 1", "Updated ingredient 2"],
       steps: ["Updated step 1", "Updated step 2"]
-    }
+    };
 
     const res = await api.put(`/api/recipes/invalid-id`)
       .send(recipeData)
@@ -415,7 +416,7 @@ describe("PUT /api/recipes/:id - Recipe Editing", () => {
       imageUrl: "http://example.com/updated.jpg",
       ingredients: ["Updated ingredient 1", "Updated ingredient 2"],
       steps: ["Updated step 1", "Updated step 2"]
-    }
+    };
 
     const res = await api.put("/api/recipes/99999")
       .send(recipeData)
@@ -423,13 +424,6 @@ describe("PUT /api/recipes/:id - Recipe Editing", () => {
 
     expect(res.status).toBe(404);
     expect(res.body.error).toBe("Recipe not found");
-
-  })
-
-  //clean up
-  afterAll(async () => {
-    await pool.query("DELETE FROM users WHERE id IN ($1, $2)", [testUser.id, otherUser.id]);
-    await pool.end();
   });
 });
 

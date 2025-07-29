@@ -5,6 +5,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 import pool from "@/lib/db";
 
+import DeleteButton from "./DeleteButton";
 import EditButton from "./EditButton";
 
 interface Recipe {
@@ -68,7 +69,12 @@ export default async function RecipeIdPage({ params }: { params: Promise<{ id: s
           <h1 className="text-3xl font-bold">{recipe.title}</h1>
           <p className="text-gray-600"> By {recipe.author_name}</p>
         </div>
-        {isAuthor && <EditButton recipeId={recipe.id} />}
+        {isAuthor && (
+          <div className="flex gap-3">
+            <EditButton recipeId={recipe.id} />
+            <DeleteButton recipeId={recipe.id} recipeTitle={recipe.title} />
+          </div>
+        )}
       </div>
     
       {recipe.image_url && (

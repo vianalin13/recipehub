@@ -138,3 +138,75 @@ export async function PUT(
     );
   }
 }
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }>}
+) {
+  try {
+    const { id } = await params;
+    const recipeId = Number(id);
+    if(isNaN(recipeId)) {
+      return NextResponse.json(
+        { error: "Invalid recipe id" },
+        { status: 400 }
+      );
+    }
+
+    //get user id from session
+    const authResult = await getUserIdFromSession(request);
+    if(authResult.error) {
+      return NextResponse.json(
+        { error: authResult.error }, 
+        { status: authResult.error === "Authentication required" ? 401 : 404 }
+      );
+    }
+
+    const userId = authResult.userId!;
+
+    //check if recipe exists and user is the author 
+    const existingRecipe = await pool.query(
+      "SELECT author_id FROM recipes WHERE id = $1",
+      [recipeId]
+    );
+
+    if(existingRecipe.rows.length === 0) {
+      return NextResponse.json(
+        { error: "Recipe not found" },
+        { status: 404 }
+      );
+    }
+
+    if(existingRecipe.rows[0].author_id !== userId) {
+      return NextResponse.json(
+        { error: "Unauthorized - you can only delete your own recipes" },
+        { status: 403 }
+      );
+    }
+
+    //delete recipe from database (cascade will handle related data)
+    const result = await pool.query(
+      "DELETE FROM recipes WHERE id = $1 AND author_id = $2 RETURNING id",
+      [recipeId, userId]
+    );
+
+    if(result.rows.length === 0) {
+      return NextResponse.json(
+        { error: "Recipe not found" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(
+      { message: "Recipe deleted successfully" },
+      { status: 200 }
+    );
+
+  } catch (error) {
+    console.error("Error deleting recipe: ", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}
