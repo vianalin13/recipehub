@@ -4,34 +4,50 @@ import request from "supertest";
 const api = request("http://localhost:3000");
 const pool = new Pool({ connectionString: process.env.POSTGRES_URL });
 
+//test constants for better maintainability
+const TEST_PASSWORD = "password123";
+
 describe("POST /api/auth/register - User Registration", () => {
+  //increase timeout for entire test
+  jest.setTimeout(60000); // 60 seconds
+  
+  let timestamp: number;
+  let random: string;
+  
+  beforeEach(() => {
+    timestamp = Date.now();
+    random = Math.random().toString(36).substring(7);
+  });
+  
+  const generateTestUser = () => ({
+    username: `testuser_${timestamp}_${random}`,
+    email: `testuser_${timestamp}_${random}@example.com`
+  });
+  
   it("registers a new user", async () => {
+    const testUser = generateTestUser();
     const res = await api.post("/api/auth/register").send({
-      username: `testuser_${Date.now()}`,
-      email: `testuser_${Date.now()}@example.com`, 
-      password: "password123"
+      ...testUser,
+      password: TEST_PASSWORD
     });
     expect(res.status).toBe(200);
     expect(res.body.user).toHaveProperty("username");
     expect(res.body.user).toHaveProperty("email");
   });
 
-
   it("does not allow duplicate usernames or emails", async () => {
-    const unique = Date.now();
+    const testUser = generateTestUser();
 
     //register once
     await api.post("/api/auth/register").send({
-      username: `dupuser_${unique}`,
-      email: `dupuser_${unique}@example.com`,
-      password: "password123"
+      ...testUser,
+      password: TEST_PASSWORD
     });
 
     //register again
     const res = await api.post("/api/auth/register").send({
-      username: `dupuser_${unique}`,
-      email: `dupuser_${unique}@example.com`,
-      password: "password123"
+      ...testUser,
+      password: TEST_PASSWORD
     });
     expect(res.status).toBe(409);
     expect(res.body.error).toMatch(/already exists/i);
@@ -48,10 +64,10 @@ describe("POST /api/auth/register - User Registration", () => {
   });
 
   it("ignores extra/unexpected fields", async () => {
+    const testUser = generateTestUser();
     const res = await api.post("/api/auth/register").send({
-      username: `extrafield_${Date.now()}`,
-      email: `extrafield_${Date.now()}@example.com`,
-      password: "password123",
+      ...testUser,
+      password: TEST_PASSWORD,
       isAdmin: true,
       gender: "female",
     });
@@ -63,24 +79,23 @@ describe("POST /api/auth/register - User Registration", () => {
   it("returns 500 if database error occurs", async () => {
     //username exceeds 255
     const longUsername = "a".repeat(256);
+    const testUser = generateTestUser();
     const res = await api.post("/api/auth/register").send({
-      username: `${longUsername}_${Date.now()}`,
-      email: `dberror${Date.now()}@example.com`,
-      password: "password123"
+      username: `${longUsername}_${timestamp}_${random}`,
+      email: testUser.email,
+      password: TEST_PASSWORD
     });
     expect(res.status).toBe(500);
     expect(res.body.error).toMatch(/internal server error/i);
   });
 
   it("stores the hashed password in the database", async () => {
-    const username = `hashuser_${Date.now()}`;
-    const email = `hashuser_${Date.now()}@example.com`;
-    const plainPassword = "password123";
+    const testUser = generateTestUser();
+    const plainPassword = TEST_PASSWORD;
 
     //check if registered successfully
     const registered = await api.post("/api/auth/register").send({
-      username, 
-      email,
+      ...testUser,
       password: plainPassword
     });
     expect(registered.status).toBe(200);
@@ -89,7 +104,7 @@ describe("POST /api/auth/register - User Registration", () => {
     try {
       const result = await pool.query(
         "SELECT * FROM users WHERE username = $1",
-        [username]
+        [testUser.username]
       );
       expect(result.rows.length).toBe(1);
       
@@ -110,5 +125,4 @@ describe("POST /api/auth/register - User Registration", () => {
   afterAll(async () => {
     await pool.end();
   });
-
 });

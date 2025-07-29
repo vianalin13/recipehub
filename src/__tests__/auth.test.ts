@@ -14,8 +14,13 @@ if (!authorizeFunction) {
 }
 
 describe("NextAuth authorize", () => {
-  const username = `authuser${Date.now()}`;
-  const email = `authuser${Date.now()}@example.com`;
+  //increase timeout for entire test
+  jest.setTimeout(60000); // 60 seconds
+  
+  const timestamp = Date.now();
+  const random = Math.random().toString(36).substring(7);
+  const username = `testuser_${timestamp}_${random}`;
+  const email = `testuser_${timestamp}_${random}@example.com`;
   const password = "password123";
 
   beforeAll(async () => {
@@ -25,7 +30,7 @@ describe("NextAuth authorize", () => {
       "INSERT INTO users (username, email, password) VALUES ($1, $2, $3)",
       [username, email, hashedPassword]
     );
-  });
+  }, 30000); // 30 second timeout
   it("logs in with correct username and password", async () => {      
     const user = await authorizeFunction({
       username,

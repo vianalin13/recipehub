@@ -14,8 +14,10 @@ describe("POST /api/recipes - Recipe Creation", () => {
 
   beforeAll(async () => {
     //create test user for authen
-    const username =  `createrecipeuser_${Date.now()}`;
-    const email = `createrecipeuser_${Date.now()}@example.com`;
+    const timestamp = Date.now();
+    const random = Math.random().toString(36).substring(7);
+    const username = `testuser_${timestamp}_${random}`;
+    const email = `testuser_${timestamp}_${random}@example.com`;
     const password = "password123";
 
     const hashedPassword = await bcrypt.hash(password, 10);
