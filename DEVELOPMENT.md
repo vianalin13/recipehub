@@ -122,6 +122,10 @@ This log tracks the progress, major milestones, decisions, and planned features 
   - Reusable `RatingStars` component with hover effects (`/src/components/RatingStars.tsx`)
 - **Reflection:** RatingStars is in `/components/` for reusability across multiple pages, while EditButton and DeleteButton are page-specific and stay in `/recipe/[id]/` since they're tightly coupled to the recipe detail context.
 
+2025-08-01
+- Implemented log out functionality (`src\app\page.tsx`)
+
+
 --- 
 
 ## Future Improvements

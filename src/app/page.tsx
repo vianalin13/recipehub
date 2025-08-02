@@ -1,10 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 
 export default function Home() {
   const { data: session, status } = useSession();
+
+  const handleLogout = async () => {
+    await signOut({ redirect: true, callbackUrl: "/"});
+  };
 
   return(
     <div className="p-8">
@@ -25,7 +29,15 @@ export default function Home() {
       {status === "loading" ? (
         <p className="text-gray-600">Loading...</p>
       ) : session ? (
-        <p className="text-green-600">Logged in as: {session.user?.email}</p>
+        <div className="space-y-2">
+          <p className="text-green-600">Logged in as: {session.user?.email}</p>
+          <button 
+            onClick={handleLogout}
+            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors"
+          >
+            Logout
+          </button>
+        </div>
       ) : (
         <p className="text-red-600">Not logged in</p>
       )}
