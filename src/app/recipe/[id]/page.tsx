@@ -1,9 +1,11 @@
+"use client";
+
 /* eslint-disable @next/next/no-img-element */
 import { notFound } from "next/navigation";
-import { getServerSession } from "next-auth";
+import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 
-import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
-import pool from "@/lib/db";
+import RatingStars from "@/components/RatingStars";
 
 import DeleteButton from "./DeleteButton";
 import EditButton from "./EditButton";
@@ -22,45 +24,68 @@ interface Recipe {
   author_id: number;
 }
 
-export default async function RecipeIdPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
+export default function RecipeIdPage({ params }: { params: Promise<{ id: string }> }) {
+  const { data: session } = useSession();
+  const [recipe, setRecipe] = useState<Recipe | null>(null);
+  const [isAuthor, setIsAuthor] = useState(false);
+  const [userRating, setUserRating] = useState<number | undefined>();
+  const [loading, setLoading] = useState(true);
 
-  if (isNaN(Number(id))) {
-    notFound();
+  useEffect(() => {
+    async function loadRecipe() {
+      try {
+        const { id } = await params;
+        
+        if (isNaN(Number(id))) {
+          notFound();
+        }
+
+        const res = await fetch(`/api/recipes/${id}`);
+        
+        if (res.status === 404) {
+          notFound();
+        }
+
+        if (!res.ok) {
+          throw new Error('Failed to load recipe');
+        }
+
+        const data = await res.json();
+        const recipeData: Recipe = data.recipe;
+        setRecipe(recipeData);
+
+        //check if user is author
+        if (session?.user?.email) {
+          const userRes = await fetch(`/api/users?email=${session.user.email}`);
+          if (userRes.ok) {
+            const userData = await userRes.json();
+            const userId = userData.user.id;
+            setIsAuthor(userId === recipeData.author_id);
+
+            //get user's rating
+            const ratingRes = await fetch(`/api/recipes/${id}/ratings`);
+            if (ratingRes.ok) {
+              const ratingData = await ratingRes.json();
+              setUserRating(ratingData.userRating);
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error loading recipe:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadRecipe();
+  }, [params, session]);
+
+  if (loading) {
+    return <div className="p-8">Loading...</div>;
   }
 
-  //get session for author verifcation
-  const session = await getServerSession(authOptions);
-
-  //use absolute URL for server-side fetches
-  const baseUrl =
-    process.env.NEXT_PUBLIC_BASE_URL ||
-    (process.env.VERCEL_URL
-      ? `https://${process.env.VERCEL_URL}`
-      : "http://localhost:3000");
-
-  const res = await fetch(`${baseUrl}/api/recipes/${id}`, {
-    cache: "no-store",
-  });
-
-  if(res.status === 404) {
-    notFound();
-  }
-
-  if(!res.ok) {
+  if (!recipe) {
     return <div className="p-8 text-red-600">Failed to load recipe</div>;
-  }
-
-  const data = await res.json();
-  const recipe: Recipe = data.recipe;
-
-  let isAuthor = false;
-  if(session?.user?.email) {
-    const userResult = await pool.query(
-      "SELECT id FROM users WHERE email = $1",
-      [session.user.email]
-    );
-    isAuthor = userResult.rows.length > 0 && userResult.rows[0].id === recipe.author_id;
   }
   return (
     <div className="p-8 max-w-2xl">
@@ -123,9 +148,14 @@ export default async function RecipeIdPage({ params }: { params: Promise<{ id: s
         </ol>
       </div>
 
-      {typeof recipe.average_rating === "number" && (
-        <div className="mt-4">Average Rating: {recipe.average_rating.toFixed(2)} ({recipe.rating_count || 0} ratings)</div>
-      )}
+      <div className="mt-6">
+        <RatingStars
+          recipeId={recipe.id}
+          averageRating={recipe.average_rating}
+          ratingCount={recipe.rating_count}
+          userRating={userRating}
+          />
+      </div>
     </div>
   );
 }

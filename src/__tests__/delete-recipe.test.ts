@@ -91,7 +91,7 @@ describe("DELETE /api/recipes/:id - Recipe Deletion", () => {
     );
 
     expect(dbResult.rows.length).toBe(0);
-  })
+  });
 
   //return 400 for invalid recipe id
   it("returns 400 for invalid recipe id", async () => {
@@ -161,5 +161,5 @@ describe("DELETE /api/recipes/:id - Recipe Deletion", () => {
   afterAll(async () => {
     await pool.query("DELETE FROM users WHERE id in ($1, $2)", [testUser.id, otherUser.id]);
     await pool.end();
-  })
-})
+  });
+});

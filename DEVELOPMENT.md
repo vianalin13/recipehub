@@ -109,9 +109,18 @@ This log tracks the progress, major milestones, decisions, and planned features 
 2025-07-27
 - Optimized test user and username/email generation in Jests 
 - Added Jest test for recipe editing API  (`src/__tests__/edit-recipe.test.ts`)
+
 - Implemented delete recipe functionality 
   - API Route for DELETE - (`src/app/api/recipes/[id]/route.ts`)
   - Delete Button - (`src/app/api/[id]/DeleteButton.tsx`), (`src/app/recipe/[id]/page.tsx`)
+- Added Jest test for recipe deletion API (`src/__tests__/delete-recipe.test.ts`)
+- **Reflection:** Testing cascade deletes maintains data integrity.
+
+2025-07-29
+- Implemented recipe ratings functionality (`src/app/recipe/[id]/page.tsx`)
+  - API endpoints: POST/DELETE `src/app/api/recipes/[id]/ratings/route.ts` for adding/updating/removing ratings
+  - Reusable `RatingStars` component with hover effects (`/src/components/RatingStars.tsx`)
+- **Reflection:** RatingStars is in `/components/` for reusability across multiple pages, while EditButton and DeleteButton are page-specific and stay in `/recipe/[id]/` since they're tightly coupled to the recipe detail context.
 
 --- 
 
